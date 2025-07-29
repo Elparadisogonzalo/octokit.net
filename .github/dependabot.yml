@@ -1,12 +1,23 @@
 version: 2
 updates:
-- package-ecosystem: nuget
-  directory: "/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 10
-- package-ecosystem: nuget
-  directory: "/build"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 10
+  - package-ecosystem: "nuget"
+    directory: "/"  # Change if your .csproj or .sln is in a subdirectory
+    schedule:
+      interval: "daily"  # or "weekly", "monthly"
+    allow:
+      - dependency-type: "all"  # "direct" if you only want top-level deps
+    ignore:
+      - dependency-name: "Octokit"
+        versions: ["0.50.0"]  # Ignore a specific version if it’s broken
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "dotnet"
+    reviewers:
+      - "koagonzalo11"  # Replace with your GitHub username or team
+    groups:
+      octokit-dependencies:
+        patterns:
+          - "Octokit*"
